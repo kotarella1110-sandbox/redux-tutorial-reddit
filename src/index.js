@@ -4,17 +4,17 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
-import rootReducer from './reducers'
+import reducer from './reducers'
 import App from './containers/App'
 
-const loggerMiddleware = createLogger()
+const middleware = [ thunkMiddleware ] // lets us dispatch() functions
+if (process.env.NODE_ENV !== 'production') {
+  middleware.push(createLogger()) // neat middleware that logs actions
+}
 
 const store = createStore(
-  rootReducer,
-  applyMiddleware(
-    thunkMiddleware, // lets us dispatch() functions
-    loggerMiddleware // neat middleware that logs actions
-  )
+  reducer,
+  applyMiddleware(...middleware)
 )
 
 render(
